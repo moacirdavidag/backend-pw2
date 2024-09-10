@@ -53,7 +53,6 @@ export class UsersRepository {
         },
       });
 
-      delete user.password;
       return user;
     } catch (error) {
       console.log(error);
