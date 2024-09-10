@@ -24,6 +24,14 @@ export class UsersService {
     return user;
   }
 
+  async findUserByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findUserByEmail(email);
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado!');
+    }
+    return user;
+  }
+
   async createUser(userDTO: UsersDTO): Promise<User> {
     const { password, email } = userDTO;
 
