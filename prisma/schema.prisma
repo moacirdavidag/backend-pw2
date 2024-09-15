@@ -14,19 +14,102 @@ datasource db {
 }
 
 model User {
-
   id Int @id @default(autoincrement())
 
-  name String @db.VarChar(100)
-  email String @unique
-  password String 
-
+  name     String @db.VarChar(100)
+  email    String @unique
+  password String
 
   createdAt DateTime?
   updatedAt DateTime?
   deletedAt DateTime?
 
-  @@map("users")
-  @@index([email])
+  pedidos Pedidos[]
 
+  @@index([email])
+  @@map("users")
+}
+
+model Produto {
+  id Int @id @default(autoincrement())
+
+  nome        String
+  descricao   String  @db.Text()
+  preco       Float
+  path_imagem String?
+
+  ingredientes Ingredientes_Produto[]
+  pedido       Pedidos?               @relation(fields: [pedido_id], references: [id])
+  pedido_id    Int?
+  categoria    Categoria[]
+  categoria_id Int?
+  sub_categoria    Subcategoria[]
+  sub_categoria_id Int?
+
+  createdAt DateTime?
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("produtos")
+}
+
+model Ingredientes_Produto {
+  id Int @id @default(autoincrement())
+
+  nome       String
+  preco      Float
+  produto    Produto? @relation(fields: [produto_id], references: [id])
+  produto_id Int?
+
+  createdAt DateTime?
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("ingredientes_produto")
+}
+
+model Pedidos {
+  id Int @id @default(autoincrement())
+
+  numero_pedido String
+  status_pedido String @default("em_preparacao")
+
+  produtos   Produto[]
+  cliente    User?     @relation(fields: [cliente_id], references: [id])
+  cliente_id Int?
+
+  createdAt DateTime?
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("pedidos")
+}
+
+model Categoria {
+  id Int @id @default(autoincrement())
+
+  nome     String
+  produtos Produto[]
+  sub_categorias Subcategoria[]
+
+  createdAt DateTime?
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("categorias")
+}
+
+model Subcategoria {
+  id Int @id @default(autoincrement())
+
+  nome     String
+  produtos Produto[]
+  categoria Categoria? @relation(fields: [categoria_id], references: [id])
+  categoria_id Int?
+
+  createdAt DateTime?
+  updatedAt DateTime?
+  deletedAt DateTime?
+
+  @@map("subcategorias")
 }
