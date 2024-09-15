@@ -20,8 +20,8 @@ model User {
   email    String @unique
   password String
 
-  createdAt DateTime?
-  updatedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
   pedidos Pedidos[]
@@ -39,15 +39,14 @@ model Produto {
   path_imagem String?
 
   ingredientes Ingredientes_Produto[]
-  pedido       Pedidos?               @relation(fields: [pedido_id], references: [id])
-  pedido_id    Int?
+  pedido    Pedidos[]
   categoria    Categoria[]
   categoria_id Int?
   sub_categoria    Subcategoria[]
   sub_categoria_id Int?
 
-  createdAt DateTime?
-  updatedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
   @@map("produtos")
@@ -61,8 +60,8 @@ model Ingredientes_Produto {
   produto    Produto? @relation(fields: [produto_id], references: [id])
   produto_id Int?
 
-  createdAt DateTime?
-  updatedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
   @@map("ingredientes_produto")
@@ -78,8 +77,8 @@ model Pedidos {
   cliente    User?     @relation(fields: [cliente_id], references: [id])
   cliente_id Int?
 
-  createdAt DateTime?
-  updatedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
   @@map("pedidos")
@@ -92,8 +91,8 @@ model Categoria {
   produtos Produto[]
   sub_categorias Subcategoria[]
 
-  createdAt DateTime?
-  updatedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
   @@map("categorias")
@@ -107,8 +106,8 @@ model Subcategoria {
   categoria Categoria? @relation(fields: [categoria_id], references: [id])
   categoria_id Int?
 
-  createdAt DateTime?
-  updatedAt DateTime?
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
   deletedAt DateTime?
 
   @@map("subcategorias")
