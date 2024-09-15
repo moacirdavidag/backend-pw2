@@ -39,8 +39,7 @@ model Produto {
   path_imagem String?
 
   ingredientes Ingredientes_Produto[]
-  pedido       Pedidos?               @relation(fields: [pedido_id], references: [id])
-  pedido_id    Int?
+  pedido    Pedidos[]
   categoria    Categoria[]
   categoria_id Int?
   sub_categoria    Subcategoria[]
