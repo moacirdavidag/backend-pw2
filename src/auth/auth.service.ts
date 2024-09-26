@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -16,7 +16,7 @@ export class AuthService {
     const user = await this.usersService.findUserByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('Usuário não encontrado');
+      throw new BadRequestException('Usuário não encontrado');
     }
 
     const isPasswordEqual = await bcrypt.compare(passwordUser, user?.password);
