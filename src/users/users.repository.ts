@@ -35,9 +35,17 @@ export class UsersRepository {
           id,
           deletedAt: null,
         },
+        select: {
+          name: true,
+          city: true,
+          email: true,
+          neighborhood: true,
+          number: true,
+          state: true,
+          street: true,
+        }
       });
 
-      delete user.password;
       return user;
     } catch (error) {
       console.log(error);
