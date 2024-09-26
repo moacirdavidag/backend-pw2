@@ -7,6 +7,7 @@ import { UsersRepository } from './users.repository';
 import { User } from './entities/users.entity';
 import { UsersDTO } from './dto/users.dto';
 import * as bcrypt from 'bcrypt';
+import path from 'path';
 
 @Injectable()
 export class UsersService {
@@ -49,12 +50,18 @@ export class UsersService {
     });
   }
 
-  async updateUser(id: number, userDTO: UsersDTO): Promise<User> {
+  async updateUser(id: number, userDTO: UsersDTO, avatar?: Express.Multer.File): Promise<User> {
     const { password } = userDTO;
 
     const user = await this.usersRepository.findUserById(id);
     if (!user) {
       throw new NotFoundException('Usuário não encontrado!');
+    }
+
+    let path_avatar = "";
+
+    if(avatar) {
+      path_avatar = avatar.filename;
     }
 
     let hashedPassword = '';
@@ -63,12 +70,14 @@ export class UsersService {
       return await this.usersRepository.updateUser(id, {
         ...userDTO,
         password: hashedPassword,
+        path: path_avatar
       });
     }
 
     return await this.usersRepository.updateUser(id, {
       ...userDTO,
       password: user.password,
+      path: path_avatar
     });
 
   }

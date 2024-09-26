@@ -43,6 +43,7 @@ export class UsersRepository {
           number: true,
           state: true,
           street: true,
+          avatar_url: true
         }
       });
 
@@ -92,7 +93,7 @@ export class UsersRepository {
 
   async updateUser(id: number, userDTO: UsersDTO): Promise<User> {
     try {
-      const { name, email, password, city, state, street, neighborhood, number } = userDTO;
+      const { name, email, password, city, state, street, neighborhood, number, path } = userDTO;
       const user = await this.prisma.user.update({
         where: {
           id,
@@ -106,6 +107,7 @@ export class UsersRepository {
           number,
           state,
           street,
+          avatar_url: path
         },
       });
 

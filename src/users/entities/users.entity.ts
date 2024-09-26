@@ -2,6 +2,7 @@ export class User {
     id?: number;
     name: string;
     email: string;
+    avatar_url?: string;
     street?: string;
     state?: string;
     neighborhood?: string;

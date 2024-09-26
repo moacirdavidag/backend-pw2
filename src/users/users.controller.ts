@@ -14,6 +14,10 @@ import { UsersService } from './users.service';
 import { User } from './entities/users.entity';
 import { UsersDTO } from './dto/users.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+
 
 @Controller('users')
 export class UsersController {
@@ -47,7 +51,14 @@ export class UsersController {
   }
 
   @Put('/:id')
-  @UseInterceptors(FileInterceptor('avatar')) // 'avatar' é o nome do campo do arquivo
+  @UseInterceptors(FileInterceptor('avatar', {
+    storage: diskStorage({
+      destination: './public/uploads',
+      filename: (req, file, cb) => {
+        cb(null, `${new Date().getTime()}${extname(file.originalname)}`);
+      },
+    })
+  })) 
   async update(
     @Param('id') id: number,
     @Body() userDTO: UsersDTO,
