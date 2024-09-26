@@ -57,12 +57,20 @@ export class UsersService {
       throw new NotFoundException('Usuário não encontrado!');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword = '';
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+      return await this.usersRepository.updateUser(id, {
+        ...userDTO,
+        password: hashedPassword,
+      });
+    }
 
     return await this.usersRepository.updateUser(id, {
       ...userDTO,
-      password: hashedPassword,
+      password: user.password,
     });
+
   }
 
   async deleteUser(id: number) {

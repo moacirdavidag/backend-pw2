@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -11,12 +11,12 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(loginDTO: LoginDTO): Promise<{ access_token: string }> {
+  async login(loginDTO: LoginDTO): Promise<{ access_token: string, username: string, id: number }> {
     const { email, password: passwordUser } = loginDTO;
     const user = await this.usersService.findUserByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('Usuário não encontrado');
+      throw new BadRequestException('Usuário não encontrado');
     }
 
     const isPasswordEqual = await bcrypt.compare(passwordUser, user?.password);
@@ -29,6 +29,8 @@ export class AuthService {
 
     return {
       access_token: await this.jwtService.signAsync(payload),
+      username: user.name,
+      id: user.id
     };
   }
 }

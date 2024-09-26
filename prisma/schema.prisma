@@ -20,6 +20,12 @@ model User {
   email    String @unique
   password String
 
+  city String?
+  state String?
+  street String?
+  neighborhood String?
+  number String?
+
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
   deletedAt DateTime?
