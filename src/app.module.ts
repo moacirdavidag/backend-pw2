@@ -17,7 +17,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ProdutosModule,
     CategoriasModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '/public'),
+      rootPath: join(__dirname, '..', '..', '/public'),
       serveRoot: '/public/'
     }),
   ],
