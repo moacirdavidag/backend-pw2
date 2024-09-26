@@ -26,6 +26,7 @@ model User {
   neighborhood String?
   number String?
   avatar_url String?
+  role String? @default("user")
 
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
