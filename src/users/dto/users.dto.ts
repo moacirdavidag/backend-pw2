@@ -31,4 +31,7 @@ export class UsersDTO {
   @IsString()
   @IsOptional()
   number?: string;
+  @IsString()
+  @IsOptional()
+  path?: string;
 }
