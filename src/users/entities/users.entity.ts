@@ -5,6 +5,7 @@ export class User {
     avatar_url?: string;
     street?: string;
     state?: string;
+    role?: string;
     neighborhood?: string;
     city?: string;
     number?: string;
