@@ -70,14 +70,14 @@ export class UsersService {
       return await this.usersRepository.updateUser(id, {
         ...userDTO,
         password: hashedPassword,
-        path: path_avatar
+        path: path_avatar !== "" ? path_avatar : user.avatar_url
       });
     }
-
+  
     return await this.usersRepository.updateUser(id, {
       ...userDTO,
       password: user.password,
-      path: path_avatar
+      path: path_avatar !== "" ? path_avatar : user.avatar_url
     });
 
   }
