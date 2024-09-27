@@ -25,6 +25,13 @@ export class ProdutosRepository {
         where: {
           id,
         },
+        include: {
+          categoria: {
+            select: {
+              id: true
+            }
+          }
+        }
       });
     } catch (error) {
       console.error(error);
@@ -49,16 +56,11 @@ export class ProdutosRepository {
             descricao,
             categoria: {
               connect: {
-                id: categoria_id,
+                id: Number(categoria_id),
               },
             },
-            preco,
+            preco: Number(preco),
             path_imagem,
-            ingredientes: {
-              connect: ingredientes?.map((ingrediente) => ({
-                id: ingrediente.id,
-              })),
-            },
           },
         });
 
@@ -98,23 +100,18 @@ export class ProdutosRepository {
       return await this.prisma.$transaction(async (tx) => {
         const produto = await tx.produto.update({
           where: {
-            id,
+            id: Number(id),
           },
           data: {
             nome,
             descricao,
             categoria: {
               connect: {
-                id: categoria_id,
+                id: Number(categoria_id),
               },
             },
-            preco,
+            preco: Number(preco),
             path_imagem,
-            ingredientes: {
-              connect: ingredientes?.map((ingrediente) => ({
-                id: ingrediente.id,
-              })),
-            },
           },
         });
 
