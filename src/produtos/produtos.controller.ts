@@ -7,10 +7,15 @@ import {
   Param,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProdutosService } from './produtos.service';
 import { Produto } from './entities/produto.entity';
 import { ProdutoDTO } from './dto/produto.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('produtos')
 export class ProdutosController {
@@ -37,9 +42,22 @@ export class ProdutosController {
   }
 
   @Post()
-  async createProduto(@Body() produtoDTO: ProdutoDTO): Promise<Produto> {
+  @UseInterceptors(
+    FileInterceptor('path_imagem', {
+      storage: diskStorage({
+        destination: './public/uploads',
+        filename: (req, file, cb) => {
+          cb(null, `${new Date().getTime()}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async createProduto(
+    @Body() produtoDTO: ProdutoDTO,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<Produto> {
     try {
-      return await this.produtosService.createProduto(produtoDTO);
+      return await this.produtosService.createProduto(produtoDTO, file);
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, error.status);
@@ -47,9 +65,23 @@ export class ProdutosController {
   }
 
   @Put('/:id')
-  async updateProduto(@Param('id') id: number, @Body() produtoDTO: ProdutoDTO): Promise<Produto> {
+  @UseInterceptors(
+    FileInterceptor('path_imagem', {
+      storage: diskStorage({
+        destination: './public/uploads',
+        filename: (req, file, cb) => {
+          cb(null, `${new Date().getTime()}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
+  async updateProduto(
+    @Param('id') id: number,
+    @Body() produtoDTO: ProdutoDTO,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<Produto> {
     try {
-      return await this.produtosService.updateProduto(id, produtoDTO);
+      return await this.produtosService.updateProduto(id, produtoDTO, file);
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, error.status);
